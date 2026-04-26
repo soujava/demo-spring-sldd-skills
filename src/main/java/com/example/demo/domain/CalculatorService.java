@@ -48,4 +48,18 @@ public class CalculatorService {
         }
         return result;
     }
+
+    public double root(double radicand, double index) {
+        if (index == 0.0) {
+            throw new ArithmeticException("Invalid operation: result is undefined or imaginary");
+        }
+        double result = Math.pow(radicand, 1.0 / index);
+        if (Double.isInfinite(result)) {
+            throw new NumericOverflowException("Numeric overflow: result is too large");
+        }
+        if (Double.isNaN(result)) {
+            throw new ArithmeticException("Invalid operation: result is undefined or imaginary");
+        }
+        return result;
+    }
 }

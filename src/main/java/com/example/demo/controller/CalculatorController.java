@@ -10,6 +10,8 @@ import com.example.demo.controller.api.DivideRequest;
 import com.example.demo.controller.api.DivideResponse;
 import com.example.demo.controller.api.PowerRequest;
 import com.example.demo.controller.api.PowerResponse;
+import com.example.demo.controller.api.RootRequest;
+import com.example.demo.controller.api.RootResponse;
 import com.example.demo.domain.CalculatorService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -56,5 +58,11 @@ public class CalculatorController {
 	public ResponseEntity<PowerResponse> power(@Valid @RequestBody PowerRequest request) {
 		double result = calculatorService.power(request.base(), request.exponent());
 		return ResponseEntity.ok(new PowerResponse(result));
+	}
+
+	@PostMapping("/root")
+	public ResponseEntity<RootResponse> root(@Valid @RequestBody RootRequest request) {
+		double result = calculatorService.root(request.radicand(), request.index());
+		return ResponseEntity.ok(new RootResponse(result));
 	}
 }
