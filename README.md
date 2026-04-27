@@ -1,8 +1,8 @@
 # Demo Calculator API
 
-Este é um projeto de exemplo com o objetivo de testar o workflow [SLDD (Software Lifecycle-Driven Development)](https://github.com/soujava/sldd-skills).
+API HTTP de calculadora feita com Spring Boot 4.0.5, Java 25 e Maven. O projeto expoe operacoes aritmeticas simples e tambem avaliacao de expressoes compostas via endpoints REST.
 
-API HTTP de calculadora criada com Spring Boot 4, Java 25 e Maven. A aplicacao expoe operacoes aritmeticas por endpoints REST, valida payloads JSON com Jakarta Validation e publica documentacao OpenAPI via SpringDoc.
+Este repositorio tambem e usado para testar o workflow [SLDD (Software Lifecycle-Driven Development)](https://github.com/soujava/sldd-skills).
 
 ## Requisitos
 
@@ -21,20 +21,18 @@ A aplicacao sobe por padrao em:
 http://localhost:8080
 ```
 
-Observacao: use `spring-boot:run` com hifen. O comando `springboot:run` nao e um goal Maven valido para este projeto.
-
 ## Como testar
 
 ```bash
 ./mvnw test
 ```
 
-Os testes seguem duas camadas:
+Os testes seguem duas camadas distintas:
 
 - Logica de negocio: testes unitarios puros, sem contexto Spring.
 - Borda HTTP: testes de integracao com `@SpringBootTest`, `@AutoConfigureMockMvc` e `MockMvcTester`.
 
-Veja detalhes em [TESTING_CONVENTIONS.md](TESTING_CONVENTIONS.md).
+Veja os padroes completos em [TESTING_CONVENTIONS.md](TESTING_CONVENTIONS.md).
 
 ## OpenAPI
 
@@ -45,7 +43,7 @@ Com a aplicacao em execucao:
 
 ## Endpoints
 
-Todos os endpoints recebem `Content-Type: application/json` e retornam um JSON com o campo `result` em caso de sucesso.
+Todos os endpoints recebem `Content-Type: application/json` e retornam JSON.
 
 | Metodo | Caminho | Payload |
 |--------|---------|---------|
@@ -55,10 +53,41 @@ Todos os endpoints recebem `Content-Type: application/json` e retornam um JSON c
 | POST | `/calculator/divide` | `dividend`, `divisor` |
 | POST | `/calculator/power` | `base`, `exponent` |
 | POST | `/calculator/root` | `radicand`, `index` |
+| POST | `/calculator/compose` | `operation`, `left`, `right` |
+
+## Respostas
+
+### Sucesso
+
+Os endpoints de operacao simples retornam:
+
+```json
+{"result":4.0}
+```
+
+O endpoint `/calculator/compose` tambem retorna o mesmo formato:
+
+```json
+{"result":16.0}
+```
+
+### Erros
+
+Payloads invalidos, JSON malformado e operacoes aritmeticas invalidas retornam um erro padronizado:
+
+```json
+{"error":"Bad Request","message":"Invalid request body"}
+```
+
+Resultados numericos fora do limite suportado podem retornar:
+
+```json
+{"error":"Unprocessable Entity","message":"Numeric overflow: result is too large"}
+```
 
 ## Exemplos
 
-Soma:
+### Soma
 
 ```bash
 curl -s -X POST http://localhost:8080/calculator/sum \
@@ -72,7 +101,7 @@ Resposta:
 {"result":4.0}
 ```
 
-Divisao:
+### Divisao
 
 ```bash
 curl -s -X POST http://localhost:8080/calculator/divide \
@@ -80,7 +109,7 @@ curl -s -X POST http://localhost:8080/calculator/divide \
   -d '{"dividend":10.0,"divisor":2.0}'
 ```
 
-Potenciacao:
+### Potenciacao
 
 ```bash
 curl -s -X POST http://localhost:8080/calculator/power \
@@ -88,7 +117,7 @@ curl -s -X POST http://localhost:8080/calculator/power \
   -d '{"base":2.0,"exponent":3.0}'
 ```
 
-Raiz:
+### Raiz
 
 ```bash
 curl -s -X POST http://localhost:8080/calculator/root \
@@ -96,18 +125,12 @@ curl -s -X POST http://localhost:8080/calculator/root \
   -d '{"radicand":9.0,"index":2.0}'
 ```
 
-## Erros
+### Expressao composta
 
-Payloads invalidos, JSON malformado e operacoes aritmeticas invalidas retornam erro padronizado:
-
-```json
-{"error":"Bad Request","message":"Invalid request body"}
-```
-
-Resultados numericos fora do limite suportado podem retornar:
-
-```json
-{"error":"Unprocessable Entity","message":"Numeric overflow: result is too large"}
+```bash
+curl -s -X POST http://localhost:8080/calculator/compose \
+  -H 'Content-Type: application/json' \
+  -d '{"operation":"ADD","left":10,"right":{"operation":"MULTIPLY","left":2,"right":3}}'
 ```
 
 ## Estrutura principal
@@ -119,9 +142,11 @@ src/main/java/com/example/demo/
 │   ├── CalculatorController.java
 │   ├── ApiErrorHandler.java
 │   └── api/
+├── controller/validation/
+│   └── ComposeExpressionValidator.java
 └── domain/
     ├── CalculatorService.java
-    └── NumericOverflowException.java
+    └── expression/
 ```
 
 ## Stack
