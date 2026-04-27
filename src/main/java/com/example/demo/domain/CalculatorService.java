@@ -2,6 +2,9 @@ package com.example.demo.domain;
 
 import java.math.BigDecimal;
 
+import com.example.demo.domain.expression.Expression;
+import com.example.demo.domain.expression.ExpressionLiteral;
+import com.example.demo.domain.expression.ExpressionNode;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -61,5 +64,22 @@ public class CalculatorService {
             throw new ArithmeticException("Invalid operation: result is undefined or imaginary");
         }
         return result;
+    }
+
+    public double evaluate(Expression expression) {
+        if (expression instanceof ExpressionLiteral literal) {
+            return literal.value();
+        }
+        if (expression instanceof ExpressionNode node) {
+            double left = evaluate(node.left());
+            double right = evaluate(node.right());
+            return switch (node.operation()) {
+                case ADD -> sum(left, right);
+                case SUBTRACT -> subtract(left, right);
+                case MULTIPLY -> multiply(left, right);
+                case DIVIDE -> divide(left, right);
+            };
+        }
+        throw new IllegalArgumentException("Unsupported expression type");
     }
 }
