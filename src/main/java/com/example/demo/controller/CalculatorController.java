@@ -12,8 +12,11 @@ import com.example.demo.controller.api.PowerRequest;
 import com.example.demo.controller.api.PowerResponse;
 import com.example.demo.controller.api.RootRequest;
 import com.example.demo.controller.api.RootResponse;
+import com.example.demo.controller.api.EvaluateRequest;
+import com.example.demo.controller.api.EvaluateResponse;
 import com.example.demo.domain.CalculatorService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +31,29 @@ public class CalculatorController {
 
 	public CalculatorController(CalculatorService calculatorService) {
 		this.calculatorService = calculatorService;
+	}
+
+	@PostMapping("/evaluate")
+	public ResponseEntity<EvaluateResponse> evaluate(@Valid @RequestBody EvaluateRequest request) {
+		com.example.demo.domain.Expression domainExpression = mapToDomain(request.expression(), 0);
+		double result = calculatorService.evaluate(domainExpression);
+		return ResponseEntity.ok(new EvaluateResponse(result));
+	}
+
+	private com.example.demo.domain.Expression mapToDomain(com.example.demo.controller.api.ExpressionDto dto, int depth) {
+		if (depth > 10) {
+			throw new IllegalArgumentException("Expression tree is too deep");
+		}
+		return switch (dto) {
+			case com.example.demo.controller.api.LiteralDto literal -> 
+				new com.example.demo.domain.Literal(literal.value());
+			case com.example.demo.controller.api.BinaryOperationDto op -> 
+				new com.example.demo.domain.BinaryOperation(
+					com.example.demo.domain.Operator.valueOf(op.operator().name()),
+					mapToDomain(op.left(), depth + 1),
+					mapToDomain(op.right(), depth + 1)
+				);
+		};
 	}
 
 	@PostMapping("/sum")

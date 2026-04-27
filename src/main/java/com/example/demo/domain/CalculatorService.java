@@ -62,4 +62,22 @@ public class CalculatorService {
         }
         return result;
     }
+
+    public double evaluate(Expression expression) {
+        return switch (expression) {
+            case Literal(double value) -> value;
+            case BinaryOperation(Operator op, Expression left, Expression right) -> {
+                double leftVal = evaluate(left);
+                double rightVal = evaluate(right);
+                yield switch (op) {
+                    case SUM -> sum(leftVal, rightVal);
+                    case SUBTRACT -> subtract(leftVal, rightVal);
+                    case MULTIPLY -> multiply(leftVal, rightVal);
+                    case DIVIDE -> divide(leftVal, rightVal);
+                    case POWER -> power(leftVal, rightVal);
+                    case ROOT -> root(leftVal, rightVal);
+                };
+            }
+        };
+    }
 }
