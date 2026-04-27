@@ -55,6 +55,7 @@ Todos os endpoints recebem `Content-Type: application/json` e retornam um JSON c
 | POST | `/calculator/divide` | `dividend`, `divisor` |
 | POST | `/calculator/power` | `base`, `exponent` |
 | POST | `/calculator/root` | `radicand`, `index` |
+| POST | `/calculator/evaluate` | `expression` (árvore de operações) |
 
 ## Exemplos
 
@@ -70,6 +71,32 @@ Resposta:
 
 ```json
 {"result":4.0}
+```
+
+Avaliação de expressão composta (ex: `(10 + 5) * 2`):
+
+```bash
+curl -s -X POST http://localhost:8080/calculator/evaluate \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "expression": {
+      "type": "operation",
+      "operator": "MULTIPLY",
+      "left": {
+        "type": "operation",
+        "operator": "SUM",
+        "left": { "type": "literal", "value": 10.0 },
+        "right": { "type": "literal", "value": 5.0 }
+      },
+      "right": { "type": "literal", "value": 2.0 }
+    }
+  }'
+```
+
+Resposta:
+
+```json
+{"result":30.0}
 ```
 
 Divisao:
@@ -118,9 +145,10 @@ src/main/java/com/example/demo/
 ├── controller/
 │   ├── CalculatorController.java
 │   ├── ApiErrorHandler.java
-│   └── api/
+│   └── api/ (DTOs)
 └── domain/
     ├── CalculatorService.java
+    ├── Expression.java (Literal, BinaryOperation)
     └── NumericOverflowException.java
 ```
 
