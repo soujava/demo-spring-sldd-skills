@@ -1,5 +1,7 @@
 # Demo Calculator API
 
+Este é um projeto de exemplo com o objetivo de testar o workflow [SLDD (Software Lifecycle-Driven Development)](https://github.com/soujava/sldd-skills).
+
 API HTTP de calculadora criada com Spring Boot 4, Java 25 e Maven. A aplicacao expoe operacoes aritmeticas por endpoints REST, valida payloads JSON com Jakarta Validation e publica documentacao OpenAPI via SpringDoc.
 
 ## Requisitos
