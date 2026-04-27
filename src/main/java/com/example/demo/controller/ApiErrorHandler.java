@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.controller.api.ErrorResponse;
+import com.example.demo.controller.validation.InvalidExpressionPayloadException;
 import com.example.demo.domain.NumericOverflowException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,11 @@ public class ApiErrorHandler {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<ErrorResponse> handleMessageNotReadableException(HttpMessageNotReadableException ex) {
 		return ResponseEntity.badRequest().body(new ErrorResponse("Bad Request", "Invalid request body"));
+	}
+
+	@ExceptionHandler(InvalidExpressionPayloadException.class)
+	public ResponseEntity<ErrorResponse> handleInvalidExpressionPayloadException(InvalidExpressionPayloadException ex) {
+		return ResponseEntity.badRequest().body(new ErrorResponse("Bad Request", ex.getMessage()));
 	}
 
 	@ExceptionHandler(ArithmeticException.class)

@@ -8,10 +8,12 @@ import com.example.demo.controller.api.MultiplyRequest;
 import com.example.demo.controller.api.MultiplyResponse;
 import com.example.demo.controller.api.DivideRequest;
 import com.example.demo.controller.api.DivideResponse;
+import com.example.demo.controller.api.ComposeResponse;
 import com.example.demo.controller.api.PowerRequest;
 import com.example.demo.controller.api.PowerResponse;
 import com.example.demo.controller.api.RootRequest;
 import com.example.demo.controller.api.RootResponse;
+import com.example.demo.controller.validation.ComposeExpressionValidator;
 import com.example.demo.domain.CalculatorService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CalculatorController {
 
 	private final CalculatorService calculatorService;
+	private final ComposeExpressionValidator composeExpressionValidator;
 
-	public CalculatorController(CalculatorService calculatorService) {
+	public CalculatorController(CalculatorService calculatorService, ComposeExpressionValidator composeExpressionValidator) {
 		this.calculatorService = calculatorService;
+		this.composeExpressionValidator = composeExpressionValidator;
 	}
 
 	@PostMapping("/sum")
@@ -64,5 +68,11 @@ public class CalculatorController {
 	public ResponseEntity<RootResponse> root(@Valid @RequestBody RootRequest request) {
 		double result = calculatorService.root(request.radicand(), request.index());
 		return ResponseEntity.ok(new RootResponse(result));
+	}
+
+	@PostMapping("/compose")
+	public ResponseEntity<ComposeResponse> compose(@RequestBody String request) {
+		double result = calculatorService.evaluate(composeExpressionValidator.parse(request));
+		return ResponseEntity.ok(new ComposeResponse(result));
 	}
 }
