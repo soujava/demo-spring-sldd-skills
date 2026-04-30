@@ -4,5 +4,7 @@ public enum ExpressionOperation {
 	ADD,
 	SUBTRACT,
 	MULTIPLY,
-	DIVIDE
+	DIVIDE,
+	POWER,
+	ROOT
 }

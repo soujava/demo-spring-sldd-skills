@@ -1,66 +1,61 @@
 package com.example.demo.domain;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("CalculatorService - multiplicacao")
+import static com.example.demo.domain.expression.Expression.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+@DisplayName("Multiply expression")
 class CalculatorServiceMultiplyTest {
 
-	private CalculatorService service;
+    @Test
+    @DisplayName("multiplies two literals")
+    void multiplyTwoLiterals() {
+        var expr = multiply(literal(2.0), literal(3.0));
+        assertEquals(6.0, expr.evaluate().value());
+    }
 
-	@BeforeEach
-	void setUp() {
-		service = new CalculatorService();
-	}
+    @Test
+    @DisplayName("multiplies by zero")
+    void multiplyByZero() {
+        var expr = multiply(literal(5.0), literal(0.0));
+        assertEquals(0.0, expr.evaluate().value());
+    }
 
-	@Test
-	@DisplayName("retorna 6.0 quando multiplica 3.0 por 2.0")
-	void multiplyBasicValues() {
-		assertEquals(6.0, service.multiply(3.0, 2.0));
-	}
+    @Test
+    @DisplayName("multiplies by one")
+    void multiplyByOne() {
+        var expr = multiply(literal(5.0), literal(1.0));
+        assertEquals(5.0, expr.evaluate().value());
+    }
 
-	@Test
-	@DisplayName("retorna 3.75 quando multiplica 1.5 por 2.5")
-	void multiplyDecimalValues() {
-		assertEquals(3.75, service.multiply(1.5, 2.5));
-	}
+    @Test
+    @DisplayName("multiplies negative numbers")
+    void multiplyNegatives() {
+        var expr = multiply(literal(-2.5), literal(-4.0));
+        assertEquals(10.0, expr.evaluate().value());
+    }
 
-	@Test
-	@DisplayName("retorna zero quando um dos fatores e zero")
-	void multiplyWithZero() {
-		assertEquals(0.0, service.multiply(7.4, 0.0));
-	}
+    @Test
+    @DisplayName("multiplies with decimal precision")
+    void multiplyDecimalPrecision() {
+        var expr = multiply(literal(0.1), literal(0.2));
+        assertEquals(0.02, expr.evaluate().value(), 1.0E-9);
+    }
 
-	@Test
-	@DisplayName("retorna o outro fator quando um fator e 1.0")
-	void multiplyWithOne() {
-		assertEquals(9.4, service.multiply(1.0, 9.4));
-	}
+    @Test
+    @DisplayName("multiplies large numbers")
+    void multiplyLargeNumbers() {
+        var expr = multiply(literal(1.0E150), literal(2.0E150));
+        assertEquals(2.0E300, expr.evaluate().value());
+    }
 
-	@Test
-	@DisplayName("retorna resultado negativo quando fatores tem sinais opostos")
-	void multiplyWithOppositeSigns() {
-		assertEquals(-10.0, service.multiply(-2.5, 4.0));
-	}
-
-	@Test
-	@DisplayName("retorna resultado positivo quando dois fatores negativos")
-	void multiplyTwoNegativeValues() {
-		assertEquals(10.0, service.multiply(-2.5, -4.0));
-	}
-
-	@Test
-	@DisplayName("retorna 0.02 quando multiplica 0.1 por 0.2 com precisao")
-	void multiplyPreciseDecimalDoubles() {
-		assertEquals(0.02, service.multiply(0.1, 0.2), 1.0E-9);
-	}
-
-	@Test
-	@DisplayName("retorna resultado deterministico com valores grandes finitos")
-	void multiplyLargeFiniteValues() {
-		assertEquals(2.0E307, service.multiply(1.0E153, 2.0E154), 1.0E292);
-	}
+    @Test
+    @DisplayName("propagates ArithmeticException from nested operation")
+    void propagatesException() {
+        var expr = multiply(literal(2.0), divide(literal(1.0), literal(0.0)));
+        assertThrows(ArithmeticException.class, expr::evaluate);
+    }
 }

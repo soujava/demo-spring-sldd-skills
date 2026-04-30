@@ -1,66 +1,74 @@
 package com.example.demo.domain;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("CalculatorService")
+import static com.example.demo.domain.expression.Expression.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+@DisplayName("Add expression")
 class CalculatorServiceTest {
 
-	private CalculatorService service;
+    @Test
+    @DisplayName("literal returns correct value")
+    void literalValue() {
+        assertEquals(4.2, literal(4.2).evaluate().value());
+    }
 
-	@BeforeEach
-	void setUp() {
-		service = new CalculatorService();
-	}
+    @Test
+    @DisplayName("adds two literals")
+    void addTwoLiterals() {
+        var expr = add(literal(1.5), literal(2.5));
+        assertEquals(4.0, expr.evaluate().value());
+    }
 
-	@Test
-	@DisplayName("retorna a soma de dois doubles positivos")
-	void sumTwoPositiveDoubles() {
-		assertEquals(4.0, service.sum(1.5, 2.5));
-	}
+    @Test
+    @DisplayName("adds negative and positive")
+    void addNegativeAndPositive() {
+        var expr = add(literal(-2.5), literal(4.0));
+        assertEquals(1.5, expr.evaluate().value());
+    }
 
-	@Test
-	@DisplayName("retorna a soma de dois doubles positivos muito grandes")
-	void sumLargePositiveDoubles() {
-		assertEquals(3.0E307, service.sum(1.0E307, 2.0E307));
-	}
+    @Test
+    @DisplayName("adds two negatives")
+    void addTwoNegatives() {
+        var expr = add(literal(-2.5), literal(-4.5));
+        assertEquals(-7.0, expr.evaluate().value());
+    }
 
-	@Test
-	@DisplayName("retorna a soma de dois doubles decimais")
-	void sumDecimalDoubles() {
-		assertEquals(3.75, service.sum(1.5, 2.25));
-	}
+    @Test
+    @DisplayName("add with zero")
+    void addWithZero() {
+        var expr = add(literal(0.0), literal(7.4));
+        assertEquals(7.4, expr.evaluate().value());
+    }
 
-	@Test
-	@DisplayName("retorna a soma de doubles com precisao decimal longa")
-	void sumPreciseDecimalDoubles() {
-		assertEquals(0.3, service.sum(0.1, 0.2), 1.0E-9);
-	}
+    @Test
+    @DisplayName("add opposite values")
+    void addOppositeValues() {
+        var expr = add(literal(-5.0), literal(5.0));
+        assertEquals(0.0, expr.evaluate().value());
+    }
 
-	@Test
-	@DisplayName("retorna o outro operando quando um dos valores e zero")
-	void sumWithZero() {
-		assertEquals(7.4, service.sum(0.0, 7.4));
-	}
+    @Test
+    @DisplayName("add large numbers")
+    void addLargeNumbers() {
+        var expr = add(literal(1.0E307), literal(2.0E307));
+        assertEquals(3.0E307, expr.evaluate().value());
+    }
 
-	@Test
-	@DisplayName("retorna zero quando soma valores opostos")
-	void sumOppositeValues() {
-		assertEquals(0.0, service.sum(-5.0, 5.0));
-	}
+    @Test
+    @DisplayName("add decimal precision")
+    void addDecimalPrecision() {
+        var expr = add(literal(0.1), literal(0.2));
+        assertEquals(0.3, expr.evaluate().value(), 1.0E-9);
+    }
 
-	@Test
-	@DisplayName("retorna a soma quando um dos valores e negativo")
-	void sumWithNegativeValue() {
-		assertEquals(1.5, service.sum(-2.5, 4.0));
-	}
-
-	@Test
-	@DisplayName("retorna a soma de dois valores negativos")
-	void sumTwoNegativeValues() {
-		assertEquals(-7.0, service.sum(-2.5, -4.5));
-	}
+    @Test
+    @DisplayName("propagates ArithmeticException from nested operation")
+    void propagatesException() {
+        var expr = add(literal(1.0), divide(literal(1.0), literal(0.0)));
+        assertThrows(ArithmeticException.class, expr::evaluate);
+    }
 }
