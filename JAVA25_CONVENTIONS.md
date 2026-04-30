@@ -4,6 +4,11 @@ O projeto usa Java 25. Sempre prefira as features modernas da linguagem.
 
 ---
 
+## Package e Imports
+- Remova imports nao utilizados.
+- Utilize nomenclatura de pacotes em minusculo, seguindo a estrutura do dominio (ex: `com.example.project.module`).
+- Utilize `import static` para constantes e metodos estaticos frequentemente usados.
+
 ## Sealed Interface + Records
 
 Use `sealed interface` com `permits` para modelar hierarquias fechadas de tipos. As implementacoes devem ser `record` quando sao portadores de dados imutaveis.
