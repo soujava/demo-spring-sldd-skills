@@ -25,3 +25,15 @@ Existem duas camadas de teste distintas com padroes diferentes. Nao as misture:
 
 Para padroes detalhados, exemplos e checklist → [TESTING_CONVENTIONS.md](TESTING_CONVENTIONS.md)
 
+## Conventional Commits
+
+Todos os commits devem seguir o padrao [Conventional Commits](https://www.conventionalcommits.org/): `tipo(escopo): descricao`.
+
+Tipos: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `ci`, `perf`, `style`, `build`.
+
+## Convencoes Java 25
+
+O projeto usa Java 25. Sempre prefira as features modernas da linguagem.
+
+Para padroes detalhados, exemplos e checklist → [JAVA25_CONVENTIONS.md](JAVA25_CONVENTIONS.md)
+
