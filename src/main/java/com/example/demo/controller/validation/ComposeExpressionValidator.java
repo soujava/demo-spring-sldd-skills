@@ -1,19 +1,21 @@
 package com.example.demo.controller.validation;
 
 import com.example.demo.domain.expression.Expression;
+import com.example.demo.domain.expression.ExpressionContext;
 import com.example.demo.domain.expression.ExpressionLiteral;
 import com.example.demo.domain.expression.ExpressionNode;
 import com.example.demo.domain.expression.ExpressionOperation;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import java.math.RoundingMode;
 import java.util.Set;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ComposeExpressionValidator {
 
-	private static final Set<String> ALLOWED_FIELDS = Set.of("operation", "left", "right");
+	private static final Set<String> ALLOWED_FIELDS = Set.of("operation", "left", "right", "context");
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	public Expression parse(String requestBody) {
@@ -49,7 +51,9 @@ public class ComposeExpressionValidator {
 		ExpressionOperation operation = parseOperation(operationNode.asText());
 		Expression left = parseNode(leftNode);
 		Expression right = parseNode(rightNode);
-		return new ExpressionNode(operation, left, right);
+		JsonNode contextNode = node.get("context");
+		ExpressionContext context = parseContext(contextNode);
+		return new ExpressionNode(operation, left, right, context);
 	}
 
 	private void validateAllowedFields(JsonNode node) {
@@ -58,6 +62,42 @@ public class ComposeExpressionValidator {
 				throw new InvalidExpressionPayloadException("Invalid request body");
 			}
 		});
+	}
+
+	private ExpressionContext parseContext(JsonNode contextNode) {
+		if (contextNode == null || contextNode.isNull()) {
+			return ExpressionContext.DEFAULT;
+		}
+		if (!contextNode.isObject()) {
+			throw new InvalidExpressionPayloadException("Invalid request body");
+		}
+		validateContextFields(contextNode);
+		JsonNode scaleNode = contextNode.get("scale");
+		JsonNode roundingModeNode = contextNode.get("roundingMode");
+		int scale = (scaleNode != null && !scaleNode.isNull())
+			? scaleNode.asInt()
+			: ExpressionContext.DEFAULT.scale();
+		RoundingMode roundingMode = (roundingModeNode != null && !roundingModeNode.isNull())
+			? parseRoundingMode(roundingModeNode.asText())
+			: ExpressionContext.DEFAULT.roundingMode();
+		return new ExpressionContext(scale, roundingMode);
+	}
+
+	private void validateContextFields(JsonNode contextNode) {
+		Set<String> allowed = Set.of("scale", "roundingMode");
+		contextNode.fieldNames().forEachRemaining(field -> {
+			if (!allowed.contains(field)) {
+				throw new InvalidExpressionPayloadException("Invalid request body");
+			}
+		});
+	}
+
+	private RoundingMode parseRoundingMode(String text) {
+		try {
+			return RoundingMode.valueOf(text);
+		} catch (IllegalArgumentException ex) {
+			throw new InvalidExpressionPayloadException("Invalid request body");
+		}
 	}
 
 	private ExpressionOperation parseOperation(String operation) {

@@ -222,4 +222,65 @@ class CalculatorDivideControllerTest {
 			.convertTo(DivideResponse.class)
 			.satisfies(response -> assertThat(response.result()).isEqualTo(3.0));
 	}
+
+	@Test
+	@DisplayName("retorna 200 com result=3.33333 quando scale=5 e roundingMode=HALF_UP")
+	void returnsDivideWithExplicitScaleAndRoundingMode() {
+		assertThat(mvc.post().uri("/calculator/divide")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"dividend":10.0,"divisor":3.0,"scale":5,"roundingMode":"HALF_UP"}
+						"""))
+			.hasStatusOk()
+			.bodyJson()
+			.convertTo(DivideResponse.class)
+			.satisfies(response -> assertThat(response.result()).isEqualTo(3.33333));
+	}
+
+	@Test
+	@DisplayName("retorna 200 com result=3.3333333333 quando scale e roundingMode omitidos (defaults)")
+	void returnsDivideWithDefaultScaleAndRoundingMode() {
+		assertThat(mvc.post().uri("/calculator/divide")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"dividend":10.0,"divisor":3.0}
+						"""))
+			.hasStatusOk()
+			.bodyJson()
+			.convertTo(DivideResponse.class)
+			.satisfies(response -> assertThat(response.result()).isEqualTo(3.3333333333));
+	}
+
+	@Test
+	@DisplayName("retorna 400 quando roundingMode e invalido")
+	void returnsBadRequestWhenRoundingModeIsInvalid() {
+		assertThat(mvc.post().uri("/calculator/divide")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"dividend":10.0,"divisor":3.0,"roundingMode":"INVALID"}
+						"""))
+			.hasStatus4xxClientError();
+	}
+
+	@Test
+	@DisplayName("retorna 400 quando scale=0")
+	void returnsBadRequestWhenScaleIsZero() {
+		assertThat(mvc.post().uri("/calculator/divide")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"dividend":10.0,"divisor":3.0,"scale":0}
+						"""))
+			.hasStatus4xxClientError();
+	}
+
+	@Test
+	@DisplayName("retorna 400 quando scale e negativo")
+	void returnsBadRequestWhenScaleIsNegative() {
+		assertThat(mvc.post().uri("/calculator/divide")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"dividend":10.0,"divisor":3.0,"scale":-5}
+						"""))
+			.hasStatus4xxClientError();
+	}
 }

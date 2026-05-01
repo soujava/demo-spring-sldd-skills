@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.RoundingMode;
+
 @RestController
 @RequestMapping("/calculator")
 public class CalculatorController {
@@ -54,7 +56,12 @@ public class CalculatorController {
 
 	@PostMapping("/divide")
 	public ResponseEntity<DivideResponse> divide(@Valid @RequestBody DivideRequest request) {
-		double result = calculatorService.divide(request.dividend(), request.divisor());
+		int scale = request.scale() != null ? request.scale() : 10;
+		RoundingMode roundingMode = request.roundingMode() != null
+			? RoundingMode.valueOf(request.roundingMode())
+			: RoundingMode.HALF_UP;
+		double result = calculatorService.divide(
+			request.dividend(), request.divisor(), scale, roundingMode);
 		return ResponseEntity.ok(new DivideResponse(result));
 	}
 

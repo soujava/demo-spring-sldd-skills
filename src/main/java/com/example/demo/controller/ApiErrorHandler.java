@@ -33,6 +33,11 @@ public class ApiErrorHandler {
 		return ResponseEntity.badRequest().body(new ErrorResponse("Bad Request", ex.getMessage()));
 	}
 
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
+		return ResponseEntity.badRequest().body(new ErrorResponse("Bad Request", ex.getMessage()));
+	}
+
 	@ExceptionHandler(NumericOverflowException.class)
 	public ResponseEntity<ErrorResponse> handleNumericOverflowException(NumericOverflowException ex) {
 		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)

@@ -51,4 +51,10 @@ class CalculatorServiceSubtractionTest {
 	void subtractLargeFiniteValues() {
 		assertEquals(1.0E307, service.subtract(3.0E307, 2.0E307), 1.0E292);
 	}
+
+	@Test
+	@DisplayName("retorna 0.2 quando subtrai 0.1 de 0.3 com precisao BigDecimal")
+	void subtractWithBigDecimalPrecision() {
+		assertEquals(0.2, service.subtract(0.3, 0.1));
+	}
 }
