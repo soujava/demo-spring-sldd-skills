@@ -1,17 +1,16 @@
 package com.example.demo.domain;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest
+@DisplayName("CalculatorService.evaluate()")
 public class CalculatorServiceEvaluateTest {
 
-    @Autowired
-    private CalculatorService calculatorService;
+    private final CalculatorService calculatorService = new CalculatorService();
 
     @Test
     void evaluate_Literal_ReturnsValue() {
