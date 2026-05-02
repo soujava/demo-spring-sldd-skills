@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CalculatorServicePowerTest {
 
-    private final CalculatorService calculatorService = new CalculatorService();
+    private final CalculatorService calculatorService = new CalculatorService(new OperationRegistry());
 
     @Test
     @DisplayName("Should calculate power correctly")

@@ -222,4 +222,32 @@ class CalculatorDivideControllerTest {
 			.convertTo(DivideResponse.class)
 			.satisfies(response -> assertThat(response.result()).isEqualTo(3.0));
 	}
+
+	@Test
+	@DisplayName("retorna 200 com 0.3333 quando divide com scale=4 e roundingMode=HALF_DOWN")
+	void returnsDivideWithExplicitScaleAndRounding() {
+		assertThat(mvc.post().uri("/calculator/divide")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"dividend":1.0,"divisor":3.0,"scale":4,"roundingMode":"HALF_DOWN"}
+						"""))
+			.hasStatusOk()
+			.bodyJson()
+			.convertTo(DivideResponse.class)
+			.satisfies(response -> assertThat(response.result()).isEqualTo(0.3333));
+	}
+
+	@Test
+	@DisplayName("retorna 200 com 0.3333333333 quando divide sem scale (default)")
+	void returnsDivideWithDefaultScale() {
+		assertThat(mvc.post().uri("/calculator/divide")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"dividend":1.0,"divisor":3.0}
+						"""))
+			.hasStatusOk()
+			.bodyJson()
+			.convertTo(DivideResponse.class)
+			.satisfies(response -> assertThat(response.result()).isEqualTo(0.3333333333));
+	}
 }

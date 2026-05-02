@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.math.RoundingMode;
+
 @SpringBootTest
 public class CalculatorServiceEvaluateTest {
 
@@ -29,7 +31,6 @@ public class CalculatorServiceEvaluateTest {
 
     @Test
     void evaluate_NestedOperations_RespectsOrder() {
-        // (10 + 5) * 2 = 30
         Expression expression = new BinaryOperation(Operator.MULTIPLY,
             new BinaryOperation(Operator.SUM, new Literal(10.0), new Literal(5.0)),
             new Literal(2.0)
@@ -42,5 +43,24 @@ public class CalculatorServiceEvaluateTest {
     void evaluate_DivisionByZero_ThrowsArithmeticException() {
         Expression expression = new BinaryOperation(Operator.DIVIDE, new Literal(10.0), new Literal(0.0));
         assertThrows(ArithmeticException.class, () -> calculatorService.evaluate(expression));
+    }
+
+    @Test
+    void evaluate_DivideWithContext_UsesProvidedContext() {
+        Expression expression = new BinaryOperation(Operator.DIVIDE,
+            new Literal(1.0), new Literal(3.0),
+            new CalculationContext(4, RoundingMode.HALF_DOWN)
+        );
+        double result = calculatorService.evaluate(expression);
+        assertEquals(0.3333, result);
+    }
+
+    @Test
+    void evaluate_DivideWithoutContext_UsesDefaultScale() {
+        Expression expression = new BinaryOperation(Operator.DIVIDE,
+            new Literal(1.0), new Literal(3.0)
+        );
+        double result = calculatorService.evaluate(expression);
+        assertEquals(0.3333333333, result);
     }
 }

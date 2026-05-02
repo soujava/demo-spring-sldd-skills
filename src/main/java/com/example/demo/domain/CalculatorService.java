@@ -1,74 +1,55 @@
 package com.example.demo.domain;
 
-import java.math.BigDecimal;
-
 import org.springframework.stereotype.Service;
 
 @Service
 public class CalculatorService {
 
+    private final OperationRegistry operationRegistry;
+
+    public CalculatorService(OperationRegistry operationRegistry) {
+        this.operationRegistry = operationRegistry;
+    }
+
     public double sum(double firstAddend, double secondAddend) {
-        // Convert doubles to BigDecimal deterministically and sum to avoid
-        // floating-point precision issues. We use BigDecimal.valueOf(double)
-        // which is preferred over new BigDecimal(double) for predictable results.
-        BigDecimal a = BigDecimal.valueOf(firstAddend);
-        BigDecimal b = BigDecimal.valueOf(secondAddend);
-        BigDecimal result = a.add(b);
-        return result.doubleValue();
+        return operationRegistry.lookup(Operator.SUM).apply(firstAddend, secondAddend);
     }
 
     public double subtract(double minuend, double subtrahend) {
-        return minuend - subtrahend;
+        return operationRegistry.lookup(Operator.SUBTRACT).apply(minuend, subtrahend);
     }
 
     public double multiply(double multiplicand, double multiplier) {
-        BigDecimal a = BigDecimal.valueOf(multiplicand);
-        BigDecimal b = BigDecimal.valueOf(multiplier);
-        BigDecimal result = a.multiply(b);
-        return result.doubleValue();
+        return operationRegistry.lookup(Operator.MULTIPLY).apply(multiplicand, multiplier);
     }
 
     public double divide(double dividend, double divisor) {
-        if (divisor == 0.0) {
-            throw new ArithmeticException("Division by zero");
-        }
-        BigDecimal a = BigDecimal.valueOf(dividend);
-        BigDecimal b = BigDecimal.valueOf(divisor);
-        BigDecimal result = a.divide(b);
-        return result.doubleValue();
+        DivideOperation op = (DivideOperation) operationRegistry.lookup(Operator.DIVIDE);
+        return op.apply(dividend, divisor);
+    }
+
+    public double divide(double dividend, double divisor, CalculationContext context) {
+        DivideOperation op = (DivideOperation) operationRegistry.lookup(Operator.DIVIDE);
+        return op.apply(dividend, divisor, context);
     }
 
     public double power(double base, double exponent) {
-        double result = Math.pow(base, exponent);
-        if (Double.isInfinite(result)) {
-            throw new NumericOverflowException("Numeric overflow: result is too large");
-        }
-        if (Double.isNaN(result)) {
-            throw new ArithmeticException("Invalid operation: result is undefined or imaginary");
-        }
-        return result;
+        return operationRegistry.lookup(Operator.POWER).apply(base, exponent);
     }
 
     public double root(double radicand, double index) {
-        if (index == 0.0) {
-            throw new ArithmeticException("Invalid operation: result is undefined or imaginary");
-        }
-        double result = Math.pow(radicand, 1.0 / index);
-        if (Double.isInfinite(result)) {
-            throw new NumericOverflowException("Numeric overflow: result is too large");
-        }
-        if (Double.isNaN(result)) {
-            throw new ArithmeticException("Invalid operation: result is undefined or imaginary");
-        }
-        return result;
+        return operationRegistry.lookup(Operator.ROOT).apply(radicand, index);
     }
 
     public double evaluate(Expression expression) {
         return switch (expression) {
             case Literal(double value) -> value;
-            case BinaryOperation(Operator op, Expression left, Expression right) -> {
+            case BinaryOperation(Operator op, Expression left, Expression right, CalculationContext ctx) -> {
                 double leftVal = evaluate(left);
                 double rightVal = evaluate(right);
+                if (op == Operator.DIVIDE && ctx != null) {
+                    yield divide(leftVal, rightVal, ctx);
+                }
                 yield switch (op) {
                     case SUM -> sum(leftVal, rightVal);
                     case SUBTRACT -> subtract(leftVal, rightVal);
