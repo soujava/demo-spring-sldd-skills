@@ -3,6 +3,8 @@ package com.example.demo.domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.math.RoundingMode;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -39,5 +41,11 @@ class CalculatorServiceRootTest {
 	@DisplayName("lanca ArithmeticException quando resultado e indefinido ou imaginario")
 	void shouldThrowArithmeticExceptionWhenResultIsUndefinedOrImaginary() {
 		assertThrows(ArithmeticException.class, () -> calculatorService.root(-4.0, 2.0));
+	}
+
+	@Test
+	@DisplayName("arredonda resultado final usando calculation context")
+	void shouldRoundFinalResultUsingCalculationContext() {
+		assertEquals(1.4142, calculatorService.root(2.0, 2.0, new CalculationContext(4, RoundingMode.HALF_UP)));
 	}
 }

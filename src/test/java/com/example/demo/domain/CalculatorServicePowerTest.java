@@ -3,6 +3,8 @@ package com.example.demo.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.RoundingMode;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -28,5 +30,11 @@ class CalculatorServicePowerTest {
     @DisplayName("Should throw ArithmeticException when result is imaginary (NaN)")
     void shouldThrowExceptionOnImaginaryResult() {
         assertThrows(ArithmeticException.class, () -> calculatorService.power(-4.0, 0.5));
+    }
+
+    @Test
+    @DisplayName("Should round final result using calculation context")
+    void shouldRoundFinalResultUsingCalculationContext() {
+        assertEquals(1.4142, calculatorService.power(2.0, 0.5, new CalculationContext(4, RoundingMode.HALF_UP)));
     }
 }

@@ -53,4 +53,18 @@ class OpenApiDocumentationTest {
 
 		assertThat(result.getResponse().getStatus()).isBetween(200, 399);
 	}
+
+	@Test
+	@DisplayName("documenta context e enum roundingMode")
+	void documentsCalculationContextAndRoundingModeEnum() throws Exception {
+		MvcTestResult result = mvc.get().uri("/v3/api-docs").exchange();
+
+		assertThat(result).hasStatusOk();
+		assertThat(result.getResponse().getContentAsString(StandardCharsets.UTF_8))
+			.contains("\"context\"")
+			.contains("\"roundingMode\"")
+			.contains("\"HALF_UP\"")
+			.contains("\"HALF_EVEN\"")
+			.contains("\"UNNECESSARY\"");
+	}
 }

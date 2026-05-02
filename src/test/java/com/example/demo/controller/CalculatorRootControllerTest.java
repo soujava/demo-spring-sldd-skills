@@ -132,4 +132,18 @@ class CalculatorRootControllerTest {
 				assertThat(error.message()).isEqualTo("Invalid request body");
 			});
 	}
+
+	@Test
+	@DisplayName("retorna 200 com resultado arredondado quando context e informado")
+	void shouldRoundFinalResultWhenContextIsProvided() {
+		assertThat(mvc.post().uri("/calculator/root")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"radicand":2.0,"index":2.0,"context":{"scale":4,"roundingMode":"HALF_UP"}}
+						"""))
+			.hasStatusOk()
+			.bodyJson()
+			.convertTo(RootResponse.class)
+			.satisfies(response -> assertThat(response.result()).isEqualTo(1.4142));
+	}
 }

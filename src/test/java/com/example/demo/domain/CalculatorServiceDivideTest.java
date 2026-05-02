@@ -3,6 +3,8 @@ package com.example.demo.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.math.RoundingMode;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -50,6 +52,29 @@ class CalculatorServiceDivideTest {
 	@DisplayName("lança ArithmeticException quando divisor=0.0")
 	void throwsArithmeticExceptionWhenDivisorIsZero() {
 		assertThatThrownBy(() -> service.divide(1.0, 0.0))
+			.isInstanceOf(ArithmeticException.class);
+	}
+
+	@Test
+	@DisplayName("retorna 0.3333 quando divide 1 por 3 com scale 4 e HALF_UP")
+	void returnsRoundedQuotientUsingProvidedContext() {
+		double result = service.divide(1.0, 3.0, new CalculationContext(4, RoundingMode.HALF_UP));
+
+		assertThat(result).isEqualTo(0.3333);
+	}
+
+	@Test
+	@DisplayName("retorna 0.33 quando divide 1 por 3 com scale 2 e DOWN")
+	void returnsRoundedDownQuotientUsingProvidedContext() {
+		double result = service.divide(1.0, 3.0, new CalculationContext(2, RoundingMode.DOWN));
+
+		assertThat(result).isEqualTo(0.33);
+	}
+
+	@Test
+	@DisplayName("lanca ArithmeticException quando divide 1 por 3 com UNNECESSARY")
+	void throwsArithmeticExceptionWhenRoundingIsNecessaryButForbidden() {
+		assertThatThrownBy(() -> service.divide(1.0, 3.0, new CalculationContext(10, RoundingMode.UNNECESSARY)))
 			.isInstanceOf(ArithmeticException.class);
 	}
 }

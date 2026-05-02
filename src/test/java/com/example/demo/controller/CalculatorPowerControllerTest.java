@@ -60,4 +60,18 @@ class CalculatorPowerControllerTest {
                     assertThat(error.message()).contains("Invalid operation");
                 });
     }
+
+    @Test
+    @DisplayName("POST /calculator/power - arredonda resultado final com context")
+    void shouldRoundFinalResultWhenContextIsProvided() {
+        assertThat(mvc.post().uri("/calculator/power")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"base":2.0,"exponent":0.5,"context":{"scale":4,"roundingMode":"HALF_UP"}}
+                                """))
+                .hasStatusOk()
+                .bodyJson()
+                .convertTo(PowerResponse.class)
+                .satisfies(response -> assertThat(response.result()).isEqualTo(1.4142));
+    }
 }

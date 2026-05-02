@@ -222,4 +222,71 @@ class CalculatorDivideControllerTest {
 			.convertTo(DivideResponse.class)
 			.satisfies(response -> assertThat(response.result()).isEqualTo(3.0));
 	}
+
+	@Test
+	@DisplayName("retorna 200 com resultado arredondado quando context e informado")
+	void returnsRoundedResultWhenContextIsProvided() {
+		assertThat(mvc.post().uri("/calculator/divide")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"dividend":1.0,"divisor":3.0,"context":{"scale":4,"roundingMode":"HALF_UP"}}
+						"""))
+			.hasStatusOk()
+			.bodyJson()
+			.convertTo(DivideResponse.class)
+			.satisfies(response -> assertThat(response.result()).isEqualTo(0.3333));
+	}
+
+	@Test
+	@DisplayName("retorna 400 com mensagem clara quando context scale e menor que 1")
+	void returnsBadRequestWhenContextScaleIsBelowMinimum() {
+		assertThat(mvc.post().uri("/calculator/divide")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"dividend":1.0,"divisor":2.0,"context":{"scale":0}}
+						"""))
+			.hasStatus4xxClientError()
+			.bodyJson()
+			.convertTo(ErrorResponse.class)
+			.satisfies(error -> {
+				assertThat(error.error()).isEqualTo("Bad Request");
+				assertThat(error.message()).contains("scale");
+				assertThat(error.message()).contains("greater than or equal to 1");
+			});
+	}
+
+	@Test
+	@DisplayName("retorna 400 com mensagem clara quando context scale e maior que 16")
+	void returnsBadRequestWhenContextScaleIsAboveMaximum() {
+		assertThat(mvc.post().uri("/calculator/divide")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"dividend":1.0,"divisor":2.0,"context":{"scale":17}}
+						"""))
+			.hasStatus4xxClientError()
+			.bodyJson()
+			.convertTo(ErrorResponse.class)
+			.satisfies(error -> {
+				assertThat(error.error()).isEqualTo("Bad Request");
+				assertThat(error.message()).contains("scale");
+				assertThat(error.message()).contains("less than or equal to 16");
+			});
+	}
+
+	@Test
+	@DisplayName("retorna 400 com mensagem clara quando roundingMode e invalido")
+	void returnsBadRequestWhenRoundingModeIsInvalid() {
+		assertThat(mvc.post().uri("/calculator/divide")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"dividend":1.0,"divisor":2.0,"context":{"roundingMode":"INVALID"}}
+						"""))
+			.hasStatus4xxClientError()
+			.bodyJson()
+			.convertTo(ErrorResponse.class)
+			.satisfies(error -> {
+				assertThat(error.error()).isEqualTo("Bad Request");
+				assertThat(error.message()).contains("roundingMode");
+			});
+	}
 }

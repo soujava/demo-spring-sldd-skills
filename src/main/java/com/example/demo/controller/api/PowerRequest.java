@@ -1,9 +1,11 @@
 package com.example.demo.controller.api;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 public record PowerRequest(
     @NotNull Double base,
-    @NotNull Double exponent
+    @NotNull Double exponent,
+    @Valid CalculationContextDto context
 ) {
 }

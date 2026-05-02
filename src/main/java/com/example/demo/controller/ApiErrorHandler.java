@@ -14,12 +14,23 @@ public class ApiErrorHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
-		return ResponseEntity.badRequest().body(new ErrorResponse("Bad Request", "Invalid request body"));
+		String message = ex.getBindingResult().getFieldErrors().stream()
+				.filter(error -> error.getField().endsWith("scale"))
+				.findFirst()
+				.map(error -> "%s %s".formatted(error.getField(), error.getDefaultMessage()))
+				.orElse("Invalid request body");
+		return ResponseEntity.badRequest().body(new ErrorResponse("Bad Request", message));
 	}
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<ErrorResponse> handleMessageNotReadableException(HttpMessageNotReadableException ex) {
-		return ResponseEntity.badRequest().body(new ErrorResponse("Bad Request", "Invalid request body"));
+		String exceptionMessage = ex.getMessage() + " " + ex.getMostSpecificCause().getMessage();
+		String message = exceptionMessage.contains("roundingMode")
+				|| exceptionMessage.contains("RoundingMode")
+				|| exceptionMessage.contains("HALF_UP")
+				? "Invalid roundingMode"
+				: "Invalid request body";
+		return ResponseEntity.badRequest().body(new ErrorResponse("Bad Request", message));
 	}
 
 	@ExceptionHandler(ArithmeticException.class)
