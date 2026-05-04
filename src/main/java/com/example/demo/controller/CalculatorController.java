@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CalculatorController {
 
 	@PostMapping("/evaluate")
-	public ResponseEntity evaluate(@Valid @RequestBody EvaluateRequest request) {
+	public ResponseEntity<EvaluateResponse> evaluate(@Valid @RequestBody EvaluateRequest request) {
 		CalculationContext rootContext = resolveContext(request.context(), CalculationContext.defaults());
 		double result = mapToDomain(request.expression()).evaluate(rootContext).value();
 		return ResponseEntity.ok(new EvaluateResponse(result));
@@ -66,7 +66,7 @@ public class CalculatorController {
 	}
 
 	@PostMapping("/sum")
-	public ResponseEntity sum(@Valid @RequestBody SumRequest request) {
+	public ResponseEntity<SumResponse> sum(@Valid @RequestBody SumRequest request) {
 		double result = Expression.sum(
 			Expression.literal(request.firstAddend()),
 			Expression.literal(request.secondAddend())
@@ -75,7 +75,7 @@ public class CalculatorController {
 	}
 
 	@PostMapping("/subtract")
-	public ResponseEntity subtract(@Valid @RequestBody SubtractRequest request) {
+	public ResponseEntity<SubtractResponse> subtract(@Valid @RequestBody SubtractRequest request) {
 		double result = Expression.subtract(
 			Expression.literal(request.minuend()),
 			Expression.literal(request.subtrahend())
@@ -84,7 +84,7 @@ public class CalculatorController {
 	}
 
 	@PostMapping("/multiply")
-	public ResponseEntity multiply(@Valid @RequestBody MultiplyRequest request) {
+	public ResponseEntity<MultiplyResponse> multiply(@Valid @RequestBody MultiplyRequest request) {
 		double result = Expression.multiply(
 			Expression.literal(request.multiplicand()),
 			Expression.literal(request.multiplier())
@@ -93,7 +93,7 @@ public class CalculatorController {
 	}
 
 	@PostMapping("/divide")
-	public ResponseEntity divide(@Valid @RequestBody DivideRequest request) {
+	public ResponseEntity<DivideResponse> divide(@Valid @RequestBody DivideRequest request) {
 		CalculationContext context = resolveContext(request.context(), CalculationContext.defaults());
 		double result = Expression.divide(
 			Expression.literal(request.dividend()),
@@ -103,7 +103,7 @@ public class CalculatorController {
 	}
 
 	@PostMapping("/power")
-	public ResponseEntity power(@Valid @RequestBody PowerRequest request) {
+	public ResponseEntity<PowerResponse> power(@Valid @RequestBody PowerRequest request) {
 		CalculationContext context = resolveContext(request.context(), CalculationContext.defaults());
 		double result = Expression.power(
 			Expression.literal(request.base()),
@@ -113,7 +113,7 @@ public class CalculatorController {
 	}
 
 	@PostMapping("/root")
-	public ResponseEntity root(@Valid @RequestBody RootRequest request) {
+	public ResponseEntity<RootResponse> root(@Valid @RequestBody RootRequest request) {
 		CalculationContext context = resolveContext(request.context(), CalculationContext.defaults());
 		double result = Expression.root(
 			Expression.literal(request.radicand()),
