@@ -1,5 +1,7 @@
 package com.example.demo.domain;
 
+import java.math.RoundingMode;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -45,5 +47,19 @@ class ExpressionTreeTest {
         Literal result = expression.evaluate(context);
 
         assertEquals(0.33, result.value());
+    }
+
+    @Test
+    @DisplayName("evaluate contextual node preserves local context only for inner expression")
+    void evaluate_ContextualNode_PreservesLocalContextOnlyForInnerExpression() {
+        Expression contextualDivide = Expression.contextual(
+                Expression.divide(Expression.literal(1.0), Expression.literal(3.0)),
+                new CalculationContextOverride(2, RoundingMode.HALF_UP));
+        Expression rootDivide = Expression.divide(contextualDivide, Expression.literal(3.0));
+        var rootContext = new CalculationContext(4, RoundingMode.HALF_UP);
+
+        Literal result = rootDivide.evaluate(rootContext);
+
+        assertEquals(0.11, result.value());
     }
 }

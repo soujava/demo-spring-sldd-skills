@@ -157,4 +157,32 @@ public class CalculatorEvaluateControllerTest {
                 .convertTo(EvaluateResponse.class)
                 .satisfies(response -> assertThat(response.result()).isEqualTo(1.4142));
     }
+
+    @Test
+    @DisplayName("context local em operacao aninhada afeta apenas a subexpressao")
+    void evaluate_NestedLocalContext_AffectsOnlyNestedExpression() {
+        assertThat(mvc.post().uri("/calculator/evaluate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "context": { "scale": 4, "roundingMode": "HALF_UP" },
+                      "expression": {
+                        "type": "operation",
+                        "operator": "DIVIDE",
+                        "left": {
+                          "type": "operation",
+                          "operator": "DIVIDE",
+                          "left": { "type": "literal", "value": 1.0 },
+                          "right": { "type": "literal", "value": 3.0 },
+                          "context": { "scale": 2, "roundingMode": "HALF_UP" }
+                        },
+                        "right": { "type": "literal", "value": 3.0 }
+                      }
+                    }
+                    """))
+                .hasStatusOk()
+                .bodyJson()
+                .convertTo(EvaluateResponse.class)
+                .satisfies(response -> assertThat(response.result()).isEqualTo(0.11));
+    }
 }

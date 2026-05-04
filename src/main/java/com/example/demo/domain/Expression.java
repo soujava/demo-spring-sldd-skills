@@ -1,6 +1,6 @@
 package com.example.demo.domain;
 
-public sealed interface Expression permits Literal, Sum, Subtract, Multiply, Divide, Power, Root {
+public sealed interface Expression permits Literal, Sum, Subtract, Multiply, Divide, Power, Root, ContextualExpression {
 
     Literal evaluate(CalculationContext context);
 
@@ -34,5 +34,9 @@ public sealed interface Expression permits Literal, Sum, Subtract, Multiply, Div
 
     static Expression root(Expression radicand, Expression index) {
         return new Root(radicand, index);
+    }
+
+    static Expression contextual(Expression expression, CalculationContextOverride context) {
+        return new ContextualExpression(expression, context);
     }
 }
