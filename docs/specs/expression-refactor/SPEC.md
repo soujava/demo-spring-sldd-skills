@@ -12,9 +12,10 @@
   - → `docs/specs/expression-refactor/02-high-level-technical-design.md`
 - [x] Step 03 — Low-Level Design and Version Policy
   - → `docs/specs/expression-refactor/03-low-level-design-and-version-policy.md`
-- [ ] Step 04 — Tests First (Driven by Acceptance Criteria)
-- [ ] Step 05 — Minimal Implementation to Pass Existing Tests
-- [ ] Step 06 — Verification and Feedback Report
+- [x] Step 04 — Tests First (Driven by Acceptance Criteria)
+- [x] Step 05 — Minimal Implementation to Pass Existing Tests
+- [x] Step 06 — Verification and Feedback Report
+  - -> `docs/specs/expression-refactor/06-verification-and-feedback-report.md`
 
 ### Context for Resume
 
