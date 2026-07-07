@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MultiplyTest {
 
     @Test
-    @DisplayName("evaluate two literals returns product")
+    @DisplayName("R1.1 evaluate two literals returns product")
     void evaluate_TwoLiterals_ReturnsProduct() {
         Expression expression = Expression.multiply(Expression.literal(2.0), Expression.literal(3.0));
 
@@ -19,7 +19,7 @@ class MultiplyTest {
     }
 
     @Test
-    @DisplayName("evaluate with BigDecimal precision")
+    @DisplayName("R1.5 evaluate with BigDecimal precision")
     void evaluate_WithBigDecimalPrecision() {
         Expression expression = Expression.multiply(Expression.literal(0.1), Expression.literal(0.2));
 

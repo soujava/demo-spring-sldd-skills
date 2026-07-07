@@ -21,7 +21,7 @@ class CalculatorDivideControllerTest {
 	MockMvcTester mvc;
 
 	@Test
-	@DisplayName("retorna 200 com resultado 3.0 quando dividend=6.0 e divisor=2.0")
+	@DisplayName("R1.1 retorna 200 com resultado 3.0 quando dividend=6.0 e divisor=2.0")
 	void returnsDivideForValidPayload() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -35,7 +35,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 com resultado 3.0 quando dividend=7.5 e divisor=2.5")
+	@DisplayName("R1.2 retorna 200 com resultado 3.0 quando dividend=7.5 e divisor=2.5")
 	void returnsDivideForDecimalPayload() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -49,7 +49,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 com resultado zero quando dividend e zero")
+	@DisplayName("R1.3 retorna 200 com resultado zero quando dividend e zero")
 	void returnsDivideWhenDividendIsZero() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -63,7 +63,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 com resultado negativo quando dividend e negativo")
+	@DisplayName("R1.4 retorna 200 com resultado negativo quando dividend e negativo")
 	void returnsDivideWhenResultIsNegative() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -77,7 +77,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando divisor esta ausente")
+	@DisplayName("R2.2 retorna 400 quando divisor esta ausente")
 	void returnsBadRequestWhenDivisorIsMissing() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -94,7 +94,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando dividend esta ausente")
+	@DisplayName("R2.3 retorna 400 quando dividend esta ausente")
 	void returnsBadRequestWhenDividendIsMissing() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -111,7 +111,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando divisor e zero (divisao por zero)")
+	@DisplayName("R2.4 retorna 400 quando divisor e zero (divisao por zero)")
 	void returnsBadRequestWhenDivisorIsZero() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -128,7 +128,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando dividend nao e numerico")
+	@DisplayName("R2.5 retorna 400 quando dividend nao e numerico")
 	void returnsBadRequestWhenDividendIsNotNumeric() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -145,7 +145,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando JSON esta malformado")
+	@DisplayName("R2.6 retorna 400 quando JSON esta malformado")
 	void returnsBadRequestWhenJsonIsMalformed() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -162,7 +162,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando corpo esta vazio")
+	@DisplayName("R2.7 retorna 400 quando corpo esta vazio")
 	void returnsBadRequestWhenBodyIsEmpty() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -177,7 +177,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 para NaN fora do contrato")
+	@DisplayName("R2.8 retorna 400 para NaN fora do contrato")
 	void rejectsNaNAsUnsupported() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -188,7 +188,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 para Infinity fora do contrato")
+	@DisplayName("R2.8 retorna 400 para Infinity fora do contrato")
 	void rejectsInfinityAsUnsupported() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -199,7 +199,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 para -Infinity fora do contrato")
+	@DisplayName("R2.8 retorna 400 para -Infinity fora do contrato")
 	void rejectsNegativeInfinityAsUnsupported() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -210,7 +210,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 para payload com campos extras")
+	@DisplayName("R2.1 retorna 200 para payload com campos extras")
 	void ignoresExtraFieldsInPayload() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -224,7 +224,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 com resultado arredondado quando context e informado")
+	@DisplayName("R1.5 retorna 200 com resultado arredondado quando context e informado")
 	void returnsRoundedResultWhenContextIsProvided() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -238,7 +238,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 com mensagem clara quando context scale e menor que 1")
+	@DisplayName("R2.9 retorna 400 com mensagem clara quando context scale e menor que 1")
 	void returnsBadRequestWhenContextScaleIsBelowMinimum() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -256,7 +256,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 com mensagem clara quando context scale e maior que 16")
+	@DisplayName("R2.10 retorna 400 com mensagem clara quando context scale e maior que 16")
 	void returnsBadRequestWhenContextScaleIsAboveMaximum() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -274,7 +274,7 @@ class CalculatorDivideControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 com mensagem clara quando roundingMode e invalido")
+	@DisplayName("R2.11 retorna 400 com mensagem clara quando roundingMode e invalido")
 	void returnsBadRequestWhenRoundingModeIsInvalid() {
 		assertThat(mvc.post().uri("/calculator/divide")
 				.contentType(MediaType.APPLICATION_JSON)

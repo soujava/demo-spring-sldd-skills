@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class SumTest {
 
     @Test
-    @DisplayName("evaluate two literals returns sum")
+    @DisplayName("R1.1 evaluate two literals returns sum")
     void evaluate_TwoLiterals_ReturnsSum() {
         Expression expression = Expression.sum(Expression.literal(1.5), Expression.literal(2.5));
 
@@ -19,7 +19,7 @@ class SumTest {
     }
 
     @Test
-    @DisplayName("evaluate nested expression returns correct result")
+    @DisplayName("R1.5 evaluate nested expression returns correct result")
     void evaluate_NestedExpression_ReturnsCorrectResult() {
         Expression inner = Expression.sum(Expression.literal(2.0), Expression.literal(3.0));
         Expression expression = Expression.sum(Expression.literal(1.0), inner);

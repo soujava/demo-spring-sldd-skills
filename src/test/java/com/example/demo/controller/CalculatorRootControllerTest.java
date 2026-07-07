@@ -21,7 +21,7 @@ class CalculatorRootControllerTest {
 	private MockMvcTester mvc;
 
 	@Test
-	@DisplayName("retorna 200 com resultado 3.0 quando radicand=9.0 e index=2.0")
+	@DisplayName("R1.1 retorna 200 com resultado 3.0 quando radicand=9.0 e index=2.0")
 	void shouldReturnSquareRootForValidPayload() {
 		assertThat(mvc.post().uri("/calculator/root")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -35,7 +35,7 @@ class CalculatorRootControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 com resultado 3.0 quando radicand=27.0 e index=3.0")
+	@DisplayName("R1.2 retorna 200 com resultado 3.0 quando radicand=27.0 e index=3.0")
 	void shouldReturnCubeRootForValidPayload() {
 		assertThat(mvc.post().uri("/calculator/root")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -49,7 +49,7 @@ class CalculatorRootControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando index e zero")
+	@DisplayName("R2.1 retorna 400 quando index e zero")
 	void shouldReturnBadRequestWhenIndexIsZero() {
 		assertThat(mvc.post().uri("/calculator/root")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -66,7 +66,7 @@ class CalculatorRootControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 com corpo de erro padronizado quando radicand esta ausente")
+	@DisplayName("R2.2 retorna 400 com corpo de erro padronizado quando radicand esta ausente")
 	void shouldReturnBadRequestWhenRadicandIsMissing() {
 		assertThat(mvc.post().uri("/calculator/root")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -83,7 +83,7 @@ class CalculatorRootControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 com corpo de erro padronizado quando index esta ausente")
+	@DisplayName("R2.3 retorna 400 com corpo de erro padronizado quando index esta ausente")
 	void shouldReturnBadRequestWhenIndexIsMissing() {
 		assertThat(mvc.post().uri("/calculator/root")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -100,7 +100,7 @@ class CalculatorRootControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 com corpo de erro padronizado quando JSON esta malformado")
+	@DisplayName("R2.4 retorna 400 com corpo de erro padronizado quando JSON esta malformado")
 	void shouldReturnBadRequestWhenJsonIsMalformed() {
 		assertThat(mvc.post().uri("/calculator/root")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -117,7 +117,7 @@ class CalculatorRootControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 com corpo de erro padronizado quando radicand tem tipo invalido")
+	@DisplayName("R2.5 retorna 400 com corpo de erro padronizado quando radicand tem tipo invalido")
 	void shouldReturnBadRequestWhenRadicandHasInvalidType() {
 		assertThat(mvc.post().uri("/calculator/root")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -134,7 +134,7 @@ class CalculatorRootControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 com resultado arredondado quando context e informado")
+	@DisplayName("R1.3 retorna 200 com resultado arredondado quando context e informado")
 	void shouldRoundFinalResultWhenContextIsProvided() {
 		assertThat(mvc.post().uri("/calculator/root")
 				.contentType(MediaType.APPLICATION_JSON)

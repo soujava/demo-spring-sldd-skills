@@ -20,7 +20,7 @@ class CalculatorPowerControllerTest {
     private MockMvcTester mvc;
 
     @Test
-    @DisplayName("POST /calculator/power - Sucesso")
+    @DisplayName("R1.1 POST /calculator/power - Sucesso")
     void shouldReturnOkOnSuccess() {
         assertThat(mvc.post().uri("/calculator/power")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -32,7 +32,7 @@ class CalculatorPowerControllerTest {
     }
 
     @Test
-    @DisplayName("POST /calculator/power - Overflow (422)")
+    @DisplayName("R2.1 POST /calculator/power - Overflow (422)")
     void shouldReturnUnprocessableEntityOnOverflow() {
         assertThat(mvc.post().uri("/calculator/power")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -47,7 +47,7 @@ class CalculatorPowerControllerTest {
     }
 
     @Test
-    @DisplayName("POST /calculator/power - Operação Inválida (400)")
+    @DisplayName("R2.2 POST /calculator/power - Operação Inválida (400)")
     void shouldReturnBadRequestOnArithmeticException() {
         assertThat(mvc.post().uri("/calculator/power")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -62,7 +62,7 @@ class CalculatorPowerControllerTest {
     }
 
     @Test
-    @DisplayName("POST /calculator/power - arredonda resultado final com context")
+    @DisplayName("R1.2 POST /calculator/power - arredonda resultado final com context")
     void shouldRoundFinalResultWhenContextIsProvided() {
         assertThat(mvc.post().uri("/calculator/power")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RootTest {
 
     @Test
-    @DisplayName("evaluate returns root")
+    @DisplayName("R1.1 evaluate returns root")
     void evaluate_ReturnsRoot() {
         Expression expression = Expression.root(Expression.literal(8.0), Expression.literal(3.0));
 
@@ -19,7 +19,7 @@ class RootTest {
     }
 
     @Test
-    @DisplayName("evaluate index zero throws ArithmeticException")
+    @DisplayName("R2.1 evaluate index zero throws ArithmeticException")
     void evaluate_IndexZero_ThrowsArithmeticException() {
         Expression expression = Expression.root(Expression.literal(8.0), Expression.literal(0.0));
 
@@ -28,7 +28,7 @@ class RootTest {
     }
 
     @Test
-    @DisplayName("evaluate negative radicand even index NaN throws ArithmeticException")
+    @DisplayName("R2.6 evaluate negative radicand even index NaN throws ArithmeticException")
     void evaluate_NegativeRadicandEvenIndex_ThrowsArithmeticException() {
         Expression expression = Expression.root(Expression.literal(-4.0), Expression.literal(2.0));
 

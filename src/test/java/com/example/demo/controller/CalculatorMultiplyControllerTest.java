@@ -21,7 +21,7 @@ class CalculatorMultiplyControllerTest {
 	MockMvcTester mvc;
 
 	@Test
-	@DisplayName("retorna 200 com resultado 6.0 quando multiplicand=3.0 e multiplier=2.0")
+	@DisplayName("R1.1 retorna 200 com resultado 6.0 quando multiplicand=3.0 e multiplier=2.0")
 	void returnsMultiplyForValidPayload() {
 		assertThat(mvc.post().uri("/calculator/multiply")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -35,7 +35,7 @@ class CalculatorMultiplyControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 com resultado 3.75 quando multiplicand=1.5 e multiplier=2.5")
+	@DisplayName("R1.2 retorna 200 com resultado 3.75 quando multiplicand=1.5 e multiplier=2.5")
 	void returnsMultiplyForDecimalPayload() {
 		assertThat(mvc.post().uri("/calculator/multiply")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -49,7 +49,7 @@ class CalculatorMultiplyControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 com resultado zero quando multiplier e zero")
+	@DisplayName("R1.3 retorna 200 com resultado zero quando multiplier e zero")
 	void returnsMultiplyWhenMultiplierIsZero() {
 		assertThat(mvc.post().uri("/calculator/multiply")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -63,7 +63,7 @@ class CalculatorMultiplyControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 com resultado negativo quando factores tem sinais opostos")
+	@DisplayName("R1.4 retorna 200 com resultado negativo quando factores tem sinais opostos")
 	void returnsMultiplyWhenResultIsNegative() {
 		assertThat(mvc.post().uri("/calculator/multiply")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -77,7 +77,7 @@ class CalculatorMultiplyControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando multiplicand esta ausente")
+	@DisplayName("R2.2 retorna 400 quando multiplicand esta ausente")
 	void returnsBadRequestWhenMultiplicandIsMissing() {
 		assertThat(mvc.post().uri("/calculator/multiply")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -94,7 +94,7 @@ class CalculatorMultiplyControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando multiplier esta ausente")
+	@DisplayName("R2.3 retorna 400 quando multiplier esta ausente")
 	void returnsBadRequestWhenMultiplierIsMissing() {
 		assertThat(mvc.post().uri("/calculator/multiply")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -111,7 +111,7 @@ class CalculatorMultiplyControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando multiplicand nao e numerico")
+	@DisplayName("R2.4 retorna 400 quando multiplicand nao e numerico")
 	void returnsBadRequestWhenMultiplicandIsNotNumeric() {
 		assertThat(mvc.post().uri("/calculator/multiply")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -128,7 +128,7 @@ class CalculatorMultiplyControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando JSON esta malformado")
+	@DisplayName("R2.5 retorna 400 quando JSON esta malformado")
 	void returnsBadRequestWhenJsonIsMalformed() {
 		assertThat(mvc.post().uri("/calculator/multiply")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -145,7 +145,7 @@ class CalculatorMultiplyControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando corpo esta vazio")
+	@DisplayName("R2.6 retorna 400 quando corpo esta vazio")
 	void returnsBadRequestWhenBodyIsEmpty() {
 		assertThat(mvc.post().uri("/calculator/multiply")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -160,7 +160,7 @@ class CalculatorMultiplyControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 para NaN fora do contrato")
+	@DisplayName("R2.7 retorna 400 para NaN fora do contrato")
 	void rejectsNaNAsUnsupported() {
 		assertThat(mvc.post().uri("/calculator/multiply")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -171,7 +171,7 @@ class CalculatorMultiplyControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 para Infinity fora do contrato")
+	@DisplayName("R2.7 retorna 400 para Infinity fora do contrato")
 	void rejectsInfinityAsUnsupported() {
 		assertThat(mvc.post().uri("/calculator/multiply")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -182,7 +182,7 @@ class CalculatorMultiplyControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 para -Infinity fora do contrato")
+	@DisplayName("R2.7 retorna 400 para -Infinity fora do contrato")
 	void rejectsNegativeInfinityAsUnsupported() {
 		assertThat(mvc.post().uri("/calculator/multiply")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -193,7 +193,7 @@ class CalculatorMultiplyControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 para payload com campos extras")
+	@DisplayName("R2.1 retorna 200 para payload com campos extras")
 	void ignoresExtraFieldsInPayload() {
 		assertThat(mvc.post().uri("/calculator/multiply")
 				.contentType(MediaType.APPLICATION_JSON)

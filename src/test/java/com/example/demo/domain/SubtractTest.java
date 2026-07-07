@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class SubtractTest {
 
     @Test
-    @DisplayName("evaluate returns difference")
+    @DisplayName("R1.1 evaluate returns difference")
     void evaluate_ReturnsDifference() {
         Expression expression = Expression.subtract(Expression.literal(5.0), Expression.literal(3.0));
 

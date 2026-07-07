@@ -22,7 +22,7 @@ public class CalculatorEvaluateControllerTest {
     private MockMvcTester mvc;
 
     @Test
-    @DisplayName("retorna 200 com resultado 15.0 para uma soma simples (10 + 5)")
+    @DisplayName("R1.1 retorna 200 com resultado 15.0 para uma soma simples (10 + 5)")
     void evaluate_SimpleSum_ReturnsCorrectResult() {
         assertThat(mvc.post().uri("/calculator/evaluate")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -43,7 +43,7 @@ public class CalculatorEvaluateControllerTest {
     }
 
     @Test
-    @DisplayName("retorna 200 com resultado 30.0 para operacoes aninhadas (10 + 5) * 2")
+    @DisplayName("R1.2 retorna 200 com resultado 30.0 para operacoes aninhadas (10 + 5) * 2")
     void evaluate_NestedOperations_RespectsOrder() {
         assertThat(mvc.post().uri("/calculator/evaluate")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +69,7 @@ public class CalculatorEvaluateControllerTest {
     }
 
     @Test
-    @DisplayName("retorna 400 quando ocorre divisao por zero na expressao")
+    @DisplayName("R1.3 retorna 400 quando ocorre divisao por zero na expressao")
     void evaluate_DivisionByZero_ReturnsBadRequest() {
         assertThat(mvc.post().uri("/calculator/evaluate")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -92,7 +92,7 @@ public class CalculatorEvaluateControllerTest {
     }
 
     @Test
-    @DisplayName("aplica context raiz em operacao DIVIDE")
+    @DisplayName("R2.1 aplica context raiz em operacao DIVIDE")
     void evaluate_AppliesRootContextToDivideOperation() {
         assertThat(mvc.post().uri("/calculator/evaluate")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -114,7 +114,7 @@ public class CalculatorEvaluateControllerTest {
     }
 
     @Test
-    @DisplayName("context local parcial herda roundingMode do context raiz")
+    @DisplayName("R2.2 context local parcial herda roundingMode do context raiz")
     void evaluate_LocalContextInheritsMissingFieldsFromRootContext() {
         assertThat(mvc.post().uri("/calculator/evaluate")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -137,7 +137,7 @@ public class CalculatorEvaluateControllerTest {
     }
 
     @Test
-    @DisplayName("aplica context local em operacao POWER")
+    @DisplayName("R2.3 aplica context local em operacao POWER")
     void evaluate_AppliesLocalContextToPowerOperation() {
         assertThat(mvc.post().uri("/calculator/evaluate")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -159,7 +159,7 @@ public class CalculatorEvaluateControllerTest {
     }
 
     @Test
-    @DisplayName("context local em operacao aninhada afeta apenas a subexpressao")
+    @DisplayName("R2.4 context local em operacao aninhada afeta apenas a subexpressao")
     void evaluate_NestedLocalContext_AffectsOnlyNestedExpression() {
         assertThat(mvc.post().uri("/calculator/evaluate")
                 .contentType(MediaType.APPLICATION_JSON)

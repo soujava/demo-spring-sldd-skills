@@ -23,7 +23,7 @@ class CalculatorControllerTest {
 	// --- Cenarios de sucesso ---
 
 	@Test
-	@DisplayName("retorna 200 com resultado 4.0 quando firstAddend=1.5 e secondAddend=2.5")
+	@DisplayName("R1.1 retorna 200 com resultado 4.0 quando firstAddend=1.5 e secondAddend=2.5")
 	void returnsSumForValidPayload() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -37,7 +37,7 @@ class CalculatorControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 com resultado quando os valores incluem zero")
+	@DisplayName("R1.2 retorna 200 com resultado quando os valores incluem zero")
 	void returnsSumWhenOneAddendIsZero() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -51,7 +51,7 @@ class CalculatorControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 com resultado quando os valores incluem numero negativo")
+	@DisplayName("R1.3 retorna 200 com resultado quando os valores incluem numero negativo")
 	void returnsSumWhenOneAddendIsNegative() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -65,7 +65,7 @@ class CalculatorControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 quando recebe doubles muito grandes mas finitos")
+	@DisplayName("R1.4 retorna 200 quando recebe doubles muito grandes mas finitos")
 	void returnsSumForLargeFiniteDoubles() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -76,7 +76,7 @@ class CalculatorControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 quando recebe campos extras alem do contrato")
+	@DisplayName("R2.1 retorna 200 quando recebe campos extras alem do contrato")
 	void ignoresExtraFieldsInPayload() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -92,7 +92,7 @@ class CalculatorControllerTest {
 	// --- Cenarios de falha de validacao (campo obrigatorio ausente) ---
 
 	@Test
-	@DisplayName("retorna 400 com corpo de erro padronizado quando firstAddend esta ausente")
+	@DisplayName("R2.2 retorna 400 com corpo de erro padronizado quando firstAddend esta ausente")
 	void returnsBadRequestWithErrorBodyWhenFirstAddendIsMissing() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -109,7 +109,7 @@ class CalculatorControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 com corpo de erro padronizado quando secondAddend esta ausente")
+	@DisplayName("R2.3 retorna 400 com corpo de erro padronizado quando secondAddend esta ausente")
 	void returnsBadRequestWithErrorBodyWhenSecondAddendIsMissing() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -128,7 +128,7 @@ class CalculatorControllerTest {
 	// --- Cenarios de falha de parsing ---
 
 	@Test
-	@DisplayName("retorna 400 com corpo de erro padronizado quando o corpo esta vazio")
+	@DisplayName("R2.4 retorna 400 com corpo de erro padronizado quando o corpo esta vazio")
 	void returnsBadRequestWithErrorBodyWhenBodyIsEmpty() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -143,7 +143,7 @@ class CalculatorControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 com corpo de erro padronizado quando o JSON esta malformado")
+	@DisplayName("R2.5 retorna 400 com corpo de erro padronizado quando o JSON esta malformado")
 	void returnsBadRequestWithErrorBodyWhenJsonIsMalformed() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -160,7 +160,7 @@ class CalculatorControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 com corpo de erro padronizado quando firstAddend nao e numerico")
+	@DisplayName("R2.6 retorna 400 com corpo de erro padronizado quando firstAddend nao e numerico")
 	void returnsBadRequestWithErrorBodyWhenFirstAddendIsNotNumeric() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -177,7 +177,7 @@ class CalculatorControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 com corpo de erro padronizado quando secondAddend tem tipo invalido")
+	@DisplayName("R2.6 retorna 400 com corpo de erro padronizado quando secondAddend tem tipo invalido")
 	void returnsBadRequestWithErrorBodyWhenSecondAddendHasInvalidType() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -196,7 +196,7 @@ class CalculatorControllerTest {
 	// --- Edge cases de contrato: NaN, Infinity, -Infinity ---
 
 	@Test
-	@DisplayName("NaN e tratado como fora do contrato suportado")
+	@DisplayName("R2.7 NaN e tratado como fora do contrato suportado")
 	void rejectsNaNAsUnsupported() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -207,7 +207,7 @@ class CalculatorControllerTest {
 	}
 
 	@Test
-	@DisplayName("Infinity e tratado como fora do contrato suportado")
+	@DisplayName("R2.7 Infinity e tratado como fora do contrato suportado")
 	void rejectsInfinityAsUnsupported() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -218,7 +218,7 @@ class CalculatorControllerTest {
 	}
 
 	@Test
-	@DisplayName("-Infinity e tratado como fora do contrato suportado")
+	@DisplayName("R2.7 -Infinity e tratado como fora do contrato suportado")
 	void rejectsNegativeInfinityAsUnsupported() {
 		assertThat(mvc.post().uri("/calculator/sum")
 				.contentType(MediaType.APPLICATION_JSON)

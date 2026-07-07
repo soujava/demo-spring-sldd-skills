@@ -21,7 +21,7 @@ class CalculatorSubtractionControllerTest {
 	MockMvcTester mvc;
 
 	@Test
-	@DisplayName("retorna 200 com resultado 2.0 quando minuend=5.0 e subtrahend=3.0")
+	@DisplayName("R1.1 retorna 200 com resultado 2.0 quando minuend=5.0 e subtrahend=3.0")
 	void returnsSubtractionForValidPayload() {
 		assertThat(mvc.post().uri("/calculator/subtract")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -35,7 +35,7 @@ class CalculatorSubtractionControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 com resultado decimal quando minuend=7.75 e subtrahend=2.25")
+	@DisplayName("R1.2 retorna 200 com resultado decimal quando minuend=7.75 e subtrahend=2.25")
 	void returnsSubtractionForDecimalPayload() {
 		assertThat(mvc.post().uri("/calculator/subtract")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -49,7 +49,7 @@ class CalculatorSubtractionControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 quando subtrahend e zero")
+	@DisplayName("R1.3 retorna 200 quando subtrahend e zero")
 	void returnsSubtractionWhenSubtrahendIsZero() {
 		assertThat(mvc.post().uri("/calculator/subtract")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -63,7 +63,7 @@ class CalculatorSubtractionControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 quando resultado da subtracao e negativo")
+	@DisplayName("R1.4 retorna 200 quando resultado da subtracao e negativo")
 	void returnsSubtractionWhenResultIsNegative() {
 		assertThat(mvc.post().uri("/calculator/subtract")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -77,7 +77,7 @@ class CalculatorSubtractionControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando minuend esta ausente")
+	@DisplayName("R2.2 retorna 400 quando minuend esta ausente")
 	void returnsBadRequestWhenMinuendIsMissing() {
 		assertThat(mvc.post().uri("/calculator/subtract")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -94,7 +94,7 @@ class CalculatorSubtractionControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando subtrahend esta ausente")
+	@DisplayName("R2.3 retorna 400 quando subtrahend esta ausente")
 	void returnsBadRequestWhenSubtrahendIsMissing() {
 		assertThat(mvc.post().uri("/calculator/subtract")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -111,7 +111,7 @@ class CalculatorSubtractionControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando minuend nao e numerico")
+	@DisplayName("R2.4 retorna 400 quando minuend nao e numerico")
 	void returnsBadRequestWhenMinuendIsNotNumeric() {
 		assertThat(mvc.post().uri("/calculator/subtract")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -128,7 +128,7 @@ class CalculatorSubtractionControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando JSON esta malformado")
+	@DisplayName("R2.5 retorna 400 quando JSON esta malformado")
 	void returnsBadRequestWhenJsonIsMalformed() {
 		assertThat(mvc.post().uri("/calculator/subtract")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -145,7 +145,7 @@ class CalculatorSubtractionControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 quando corpo esta vazio")
+	@DisplayName("R2.6 retorna 400 quando corpo esta vazio")
 	void returnsBadRequestWhenBodyIsEmpty() {
 		assertThat(mvc.post().uri("/calculator/subtract")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -160,7 +160,7 @@ class CalculatorSubtractionControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 para NaN fora do contrato")
+	@DisplayName("R2.7 retorna 400 para NaN fora do contrato")
 	void rejectsNaNAsUnsupported() {
 		assertThat(mvc.post().uri("/calculator/subtract")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -171,7 +171,7 @@ class CalculatorSubtractionControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 para Infinity fora do contrato")
+	@DisplayName("R2.7 retorna 400 para Infinity fora do contrato")
 	void rejectsInfinityAsUnsupported() {
 		assertThat(mvc.post().uri("/calculator/subtract")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -182,7 +182,7 @@ class CalculatorSubtractionControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 400 para -Infinity fora do contrato")
+	@DisplayName("R2.7 retorna 400 para -Infinity fora do contrato")
 	void rejectsNegativeInfinityAsUnsupported() {
 		assertThat(mvc.post().uri("/calculator/subtract")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -193,7 +193,7 @@ class CalculatorSubtractionControllerTest {
 	}
 
 	@Test
-	@DisplayName("retorna 200 para payload com campos extras")
+	@DisplayName("R2.1 retorna 200 para payload com campos extras")
 	void ignoresExtraFieldsInPayload() {
 		assertThat(mvc.post().uri("/calculator/subtract")
 				.contentType(MediaType.APPLICATION_JSON)
